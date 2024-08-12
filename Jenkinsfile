@@ -1,7 +1,7 @@
 @Library("jens-pipeline-lib") _
 pipeline {
-    agent any
-//    agent { label 'linux' }
+//    agent any
+    agent { label 'ritterpc' }
     triggers {
         snapshotDependencies()
         pollSCM '@hourly'
