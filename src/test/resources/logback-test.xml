@@ -6,7 +6,7 @@ DIESE CONFIG WIRD VON JETTY+TOMCAT VERWENDET !
  -->
 <configuration debug="false">
 
-    <property name="APP_NAME" value="logfile" />
+    <property name="APP_NAME" value="logfile"/>
     <appender name="RootConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
         <!--
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -21,22 +21,23 @@ DIESE CONFIG WIRD VON JETTY+TOMCAT VERWENDET !
 
     </appender>
 
-    <logger name="org.hibernate.validator" level="WARN" />
-    <logger name="org.jboss.logging" level="WARN" />
+    <logger name="org.hibernate.validator" level="WARN"/>
+    <logger name="org.jboss.logging" level="WARN"/>
 
-    <logger name="org.springframework" level="WARN" />
-    <logger name="org.springframework.boot.actuate" level="WARN" />
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.springframework.boot.actuate" level="WARN"/>
 
-    <logger name="org.apache.http" level="WARN" />
-    <logger name="org.apache.catalina" level="WARN" />
-    <logger name="org.apache.tomcat" level="WARN" />
-    <logger name="org.apache.coyote" level="WARN" />
+    <logger name="org.apache.http" level="WARN"/>
+    <logger name="org.apache.catalina" level="WARN"/>
+    <logger name="org.apache.tomcat" level="WARN"/>
+    <logger name="org.apache.coyote" level="WARN"/>
 
-    <logger name="org.thymeleaf" level="WARN" />
-    <logger name="net.sf.ehcache" level="WARN" />
+    <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="net.sf.ehcache" level="WARN"/>
+    <logger name="org.jens.shorthand.spring.boot.defaultchecker.BootPropertiesChecker" level="WARN"/>
 
     <root level="DEBUG">
-        <appender-ref ref="RootConsoleAppender" />
+        <appender-ref ref="RootConsoleAppender"/>
     </root>
 
 </configuration>
