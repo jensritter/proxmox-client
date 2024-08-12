@@ -1,5 +1,6 @@
 package org.jens.proxmox;
 
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,10 +15,15 @@ import java.util.stream.Collectors;
  * @author Jens Ritter on 12.08.2024.
  */
 public class VmConfig {
+    private final Logger logger = LoggerFactory.getLogger(VmConfig.class);
+
+    static final Set<String> DISKS = Set.of("scsi", "ide", "sata", "virtio");
+    static final Pattern DISKPATTERN = Pattern.compile("^(" + String.join("|", DISKS) + ")\\d+");
 
     private final String node;
     private final int vmid;
     private final Map<String, String> map;
+
 
     /**
      * Privater Constructor. Obj wird nur durch Jackson initiert.
@@ -42,13 +48,10 @@ public class VmConfig {
     public String get(String key) {return this.map.get(key);}
 
     public Map<String, DiskInfo> listDiskConfig() {
-        Pattern compile = Pattern.compile("^(scsi|ide|sata|virtio)\\d+");
         return map.entrySet().stream()
-            .filter(it->compile.matcher(it.getKey()).find())
+            .filter(it->DISKPATTERN.matcher(it.getKey()).find())
             .collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getValue())));
     }
-
-    private final Logger logger = LoggerFactory.getLogger(VmConfig.class);
 
     public DiskInfo parseLine(String diskLine) {
         String[] split = diskLine.split(",");
@@ -84,23 +87,27 @@ public class VmConfig {
 
 
         String size = properties.get("size");
-        long calcSize = 0;
+        Long sizeInGB = parseSize(size);
+        //TODO: iso-mounts?
+        return new DiskInfo(store, filename, properties.get("format"), sizeInGB, "1".equals(properties.get("ssd")));
+    }
+
+    private static @Nullable Long parseSize(String size) {
         if (size != null) {
             String sizeEinheit = size.substring(size.length() - 1);
-            Long i = Long.valueOf(size.substring(0, size.length() - 1));
-            calcSize = switch (sizeEinheit) {
-                case "G" -> i;
-                case "M" -> i / 1024L;
-                case "K" -> i / 1024L / 1024L;
+            long number = Long.parseLong(size.substring(0, size.length() - 1));
+            return switch (sizeEinheit) {
+                case "G" -> number;
+                case "M" -> number / 1024L;
+                case "K" -> number / 1024L / 1024L;
                 default -> throw new IllegalStateException("Unexpected value: " + sizeEinheit);
             };
         } else {
-
+            // unmounted cdroms, haben NULL size
+            return null;
         }
-        //TODO: iso-mounts?
-        return new DiskInfo(store, filename, properties.get("format"), calcSize, "1".equals(properties.get("ssd")));
     }
 
 
-    public record DiskInfo(String storageType, String filename, String format, long sizeG, boolean ssd) {}
+    public record DiskInfo(String storageType, String filename, String format, @Nullable Long sizeG, boolean ssd) {}
 }

@@ -7,8 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -27,7 +25,7 @@ public class ProxmoxClientTest extends MySpringRunner {
     ProxmoxSession client;
 
     @Test
-    void testLogin() throws IOException {
+    void testLogin() {
         assertThat(client).isNotNull();
         ProxmoxSession.Version version = client.queryVersion();
         assertThat(version).isNotNull();

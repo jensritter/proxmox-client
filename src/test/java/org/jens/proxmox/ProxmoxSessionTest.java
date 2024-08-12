@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,7 @@ class ProxmoxSessionTest extends MySpringRunner {
     }
 
     @Test
-    void testqueryVersion() throws IOException {
+    void testqueryVersion() {
         assertThat(client).isNotNull();
         Object version = client.queryVersion();
         assertThat(version).isNotNull();
@@ -112,6 +111,10 @@ class ProxmoxSessionTest extends MySpringRunner {
         var reducedSet = allConfigKeys.stream()
             .map(it->it.replaceAll("\\d$", "")) // löschen die letzte nummer
             .collect(Collectors.toSet());
+
+        assertThat(reducedSet)
+            .containsAnyElementsOf(VmConfig.DISKS);
+
         assertThat(reducedSet).containsExactlyInAnyOrder(
             "parent",
             "agent",
