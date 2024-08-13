@@ -1,6 +1,6 @@
 package org.jens.proxmox;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -16,6 +16,7 @@ import java.util.List;
  */
 public final class ProxmoxSession {
     private final Logger logger = LoggerFactory.getLogger(ProxmoxSession.class);
+
     private final RestClient restClient;
     private final String clustername;
 
@@ -28,7 +29,7 @@ public final class ProxmoxSession {
     public String getClustername() {return clustername;}
 
 
-    private record GenericList<K>(List<K> data) {}
+    private record GenericList<K>(@NotNull List<K> data) {}
 
     private <K> List<K> getList(String url, ParameterizedTypeReference<GenericList<K>> reponseClass) {
         logger.info("{}", url);
@@ -42,16 +43,6 @@ public final class ProxmoxSession {
             logger.warn("No GenericList-Response.");
             return Collections.emptyList();
         }
-    }
-
-    @Nullable
-    private <K> K getUnwrapped(String url, Class<K> reponseClass) {
-        logger.info("{}", url);
-        return restClient.get()
-            .uri(url)
-            .retrieve()
-            .body(reponseClass)
-            ;
     }
 
     private <K> K getSingle(String url, ParameterizedTypeReference<ProxmoxClient.GenericData<K>> reponseClasss) {
@@ -79,14 +70,15 @@ public final class ProxmoxSession {
     @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public List<Node> queryNodes() {return getList("/nodes", new ParameterizedTypeReference<>() {});}
 
-    private record VmStatusPriv(int vmid, String status, long maxdisk, long maxmem) {}
 
     public record VmStatus(String node, int vmid, String status, long maxdisk, long maxmem) {}
 
+    private record TmpVmStatus(int vmid, String status, long maxdisk, long maxmem) {}
+
     @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public List<VmStatus> queryVms(String node) {
-        List<VmStatusPriv> list = getList("/nodes/" + node + "/qemu", new ParameterizedTypeReference<>() {});
-        return list.stream()
+        List<TmpVmStatus> tmpList = getList("/nodes/" + node + "/qemu", new ParameterizedTypeReference<>() {});
+        return tmpList.stream()
             .map(it->new VmStatus(node, it.vmid(), it.status(), it.maxdisk(), it.maxmem()))
             .toList();
     }
@@ -106,6 +98,5 @@ public final class ProxmoxSession {
         }
         return new VmConfig(node, vmid, response.data());
     }
-
 
 }

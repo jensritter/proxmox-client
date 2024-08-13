@@ -87,7 +87,8 @@ public class ProxmoxClientTest extends MySpringRunner {
 //    @Test
 //    void diskSumStream() {
 //        logger.info("start");
-//        List<ProxmoxSession.Config> list = client.queryNodes().parallelStream().map(it->client.queryVms(it.node())).flatMap(it->it.stream()).map(it->client.queryConfig(it.node(), it.vmid())).toList();
+//        List<ProxmoxSession.Config> list = client.queryNodes().parallelStream().map(it->client.queryVms(it.node())).flatMap(it->it.stream())
+//        .map(it->client.queryConfig(it.node(), it.vmid())).toList();
 //
 //        logger.info("done");
 //

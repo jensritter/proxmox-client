@@ -14,6 +14,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>
+
         <dependency><!-- Create Metadata for org.jens.proxmox.config.properties.ProxmoxProperties -->
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
