@@ -1,6 +1,5 @@
 package org.jens.proxmox;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -12,11 +11,6 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Jens Ritter on 12.08.2024.
  */
 class VmConfigTest {
-    @BeforeEach
-    void setUp() {
-        VmConfig cfg = new VmConfig("node", 10, null);
-    }
-
     VmConfig buildDiskLine(String diskType, String line) {
         Map<String, String> values = new HashMap<>();
         values.put(diskType, line);
@@ -34,5 +28,15 @@ class VmConfigTest {
         assertThat(scsi0.format()).isEqualTo("raw");
         assertThat(scsi0.ssd()).isFalse();
         assertThat(scsi0.iothread()).isTrue();
+    }
+
+    @Test
+    void testName() {
+        var cfg = new VmConfig("node", 10, Map.of("name", "hostname"));
+        assertThat(cfg.getVmid()).isEqualTo(10);
+        assertThat(cfg.getNode()).isEqualTo("node");
+        assertThat(cfg.getName()).isEqualTo("hostname");
+
+
     }
 }

@@ -4,10 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -17,7 +14,7 @@ import java.util.stream.Collectors;
 public class VmConfig {
     private final Logger logger = LoggerFactory.getLogger(VmConfig.class);
 
-    static final Set<String> DISKS = Set.of("scsi", "ide", "sata", "virtio");
+    static final Set<String> DISKS = Set.of("scsi", "ide", "sata", "virtio", "efidisk");
     static final Pattern DISKPATTERN = Pattern.compile("^(" + String.join("|", DISKS) + ")\\d+");
 
     private final String node;
@@ -48,9 +45,7 @@ public class VmConfig {
     public String get(String key) {return this.map.get(key);}
 
     public Map<String, DiskInfo> listDiskConfig() {
-        return map.entrySet().stream()
-            .filter(it->DISKPATTERN.matcher(it.getKey()).find())
-            .collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getKey(), it.getValue())));
+        return map.entrySet().stream().filter(it->DISKPATTERN.matcher(it.getKey()).find()).collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getKey(), it.getValue())));
     }
 
     public DiskInfo parseLine(String diskid, String diskLine) {
@@ -89,15 +84,7 @@ public class VmConfig {
         String size = properties.get("size");
         Long sizeInGB = parseSize(size);
         //TODO: iso-mounts?
-        return new DiskInfo(
-            diskid,
-            store, filename,
-            properties.get("format"),
-            sizeInGB,
-            "1".equals(properties.get("ssd")),
-            "1".equals(properties.get("iothread")
-            )
-        );
+        return new DiskInfo(diskid, store, filename, properties.get("format"), sizeInGB, "1".equals(properties.get("ssd")), "1".equals(properties.get("iothread")));
     }
 
     private static @Nullable Long parseSize(String size) {
@@ -116,6 +103,29 @@ public class VmConfig {
         }
     }
 
+    public String getName() {return this.map.getOrDefault("name", "");}
+
+    public int getCores() {return Integer.parseInt(this.map.getOrDefault("cores", "0"));}
+
+    public int getSockets() {return Integer.parseInt(this.map.getOrDefault("sockets", "0"));}
+
+    public boolean isAgent() {return "1".equals(map.get("agent"));}
+
+    public boolean isOnBoot() {return "1".equals(map.get("onboot"));}
+
+    public String getOsType() {return map.getOrDefault("ostype", "");}
+
+    public Startup getStartUp() {
+        var startup = map.getOrDefault("startup", "");
+        throw new IllegalStateException("unimplemented: TODO: generic csv-parser für this and DiskInfo");
+    }
+
+    public Set<String> getTags() {
+        var tags = map.getOrDefault("tags", "");
+        return new LinkedHashSet<>(
+            Arrays.asList(tags.split(";"))
+        );
+    }
 
     public record DiskInfo(
         /*
@@ -145,6 +155,7 @@ public class VmConfig {
         /*
          * Option iothread=1
          */
-        boolean iothread
-    ) {}
+        boolean iothread) {}
+
+    public record Startup(int order, int up, int down) {}
 }
