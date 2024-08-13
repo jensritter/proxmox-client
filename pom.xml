@@ -13,7 +13,38 @@
     <artifactId>proxmox-client</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
+    <developers>
+        <developer>
+            <email>jens.ritter@gmail.com</email>
+            <name>Jens Ritter</name>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <url>https://github.com/jensritter/proxmox-client/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/jensritter/proxmox-client</url>
+        <connection>scm:git:https://github.com/jensritter/proxmox-client.git</connection>
+        <developerConnection>scm:git:git@github.com:jensritter/proxmox-client.git</developerConnection>
+    </scm>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
 
         <dependency><!-- Create Metadata for org.jens.proxmox.config.properties.ProxmoxProperties -->
             <groupId>org.springframework.boot</groupId>
@@ -22,24 +53,29 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jens.starter</groupId>
-            <artifactId>starter-cli</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.jens.starter</groupId>
-            <artifactId>starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>org.jens.starter</groupId>
+            <artifactId>starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
