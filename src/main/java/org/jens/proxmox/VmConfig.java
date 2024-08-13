@@ -50,10 +50,10 @@ public class VmConfig {
     public Map<String, DiskInfo> listDiskConfig() {
         return map.entrySet().stream()
             .filter(it->DISKPATTERN.matcher(it.getKey()).find())
-            .collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getValue())));
+            .collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getKey(), it.getValue())));
     }
 
-    public DiskInfo parseLine(String diskLine) {
+    public DiskInfo parseLine(String diskid, String diskLine) {
         String[] split = diskLine.split(",");
         // 1. eintrag ist immer der speicherort
 
@@ -89,7 +89,15 @@ public class VmConfig {
         String size = properties.get("size");
         Long sizeInGB = parseSize(size);
         //TODO: iso-mounts?
-        return new DiskInfo(store, filename, properties.get("format"), sizeInGB, "1".equals(properties.get("ssd")));
+        return new DiskInfo(
+            diskid,
+            store, filename,
+            properties.get("format"),
+            sizeInGB,
+            "1".equals(properties.get("ssd")),
+            "1".equals(properties.get("iothread")
+            )
+        );
     }
 
     private static @Nullable Long parseSize(String size) {
@@ -109,5 +117,34 @@ public class VmConfig {
     }
 
 
-    public record DiskInfo(String storageType, String filename, String format, @Nullable Long sizeG, boolean ssd) {}
+    public record DiskInfo(
+        /*
+         * scsi0, ide0, or scsi1, etc ...
+         */
+        String diskid,
+        /*
+         * Name of storage
+         */
+        String storageName,
+        /*
+         * Filename in storage
+         */
+        String filename,
+        /*
+         * 'raw' or other internal fileformat
+         */
+        String format,
+        /*
+         * Size in GB
+         */
+        @Nullable Long sizeG,
+        /*
+         * Option 'ssd=1'
+         */
+        boolean ssd,
+        /*
+         * Option iothread=1
+         */
+        boolean iothread
+    ) {}
 }

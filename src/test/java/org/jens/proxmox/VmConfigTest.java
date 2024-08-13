@@ -30,6 +30,9 @@ class VmConfigTest {
         assertThat(disks).containsOnlyKeys("scsi0");
         VmConfig.DiskInfo scsi0 = disks.get("scsi0");
         assertThat(scsi0.filename()).isEqualTo("vm-172-disk-1");
-        assertThat(scsi0.storageType()).isEqualTo("local-lvm");
+        assertThat(scsi0.storageName()).isEqualTo("local-lvm");
+        assertThat(scsi0.format()).isEqualTo("raw");
+        assertThat(scsi0.ssd()).isFalse();
+        assertThat(scsi0.iothread()).isTrue();
     }
 }
