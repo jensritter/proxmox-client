@@ -83,7 +83,7 @@ class ProxmoxSessionTest extends MySpringRunner {
 
     @Test
     void queryConfig() {
-        var vm = client.queryVms(TEST_VM).stream().limit(1).findAny().orElseThrow(()->new RuntimeException("Missing some VM on " + TEST_VM));
+        var vm = client.queryVms(TEST_VM).stream().limit(1).findAny().orElseThrow(() -> new RuntimeException("Missing some VM on " + TEST_VM));
         VmConfig vmConfig = client.queryConfig(TEST_VM, vm.vmid());
         assertThat(vmConfig).isNotNull();
         assertThat(vmConfig.getVmid()).isEqualTo(vm.vmid());
@@ -94,7 +94,7 @@ class ProxmoxSessionTest extends MySpringRunner {
     }
 
     @Test
-    @EnabledIfEnvironmentVariable(named="COMPUTERNAME", matches="ACHT")
+    @EnabledIfEnvironmentVariable(named = "COMPUTERNAME", matches = "ACHT")
     void itValidConfigTest() {
         Set<String> allConfigKeys = new HashSet<>();
         for (ProxmoxSession.Node node : client.queryNodes()) {
@@ -103,13 +103,13 @@ class ProxmoxSessionTest extends MySpringRunner {
                 allConfigKeys.addAll(vmConfig.keySet());
 
                 Map<String, VmConfig.DiskInfo> stringDiskInfoMap = vmConfig.listDiskConfig();
-                assertThat(stringDiskInfoMap).isNotEmpty();
+                assertThat(stringDiskInfoMap).describedAs(vm.vmid() + " on " + node.node() + " sollte disk-definition haben").isNotEmpty();
             }
         }
 
 
         var reducedSet = allConfigKeys.stream()
-            .map(it->it.replaceAll("\\d$", "")) // löschen die letzte nummer
+            .map(it -> it.replaceAll("\\d$", "")) // löschen die letzte nummer
             .collect(Collectors.toSet());
 
         assertThat(reducedSet)
@@ -123,7 +123,7 @@ class ProxmoxSessionTest extends MySpringRunner {
             "description",
             "protection",
             "cpulimit",
-            "tpmstate",
+            // "tpmstate", -- nicht mehr verwendet
             "sata", /* X */
             "scsi", /* X */
             "scsihw",
@@ -146,7 +146,12 @@ class ProxmoxSessionTest extends MySpringRunner {
             "machine",
             "onboot",
             "name",
-            "unused"
+            "unused",
+
+            "template",
+            "net1",
+            "cpuunits"
+
         );
         assertThat(allConfigKeys).hasSizeGreaterThan(reducedSet.size());
 
