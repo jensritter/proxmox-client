@@ -79,7 +79,7 @@ public final class ProxmoxSession {
     public List<VmStatus> queryVms(String node) {
         List<TmpVmStatus> tmpList = getList("/nodes/" + node + "/qemu", new ParameterizedTypeReference<>() {});
         return tmpList.stream()
-            .map(it->new VmStatus(node, it.vmid(), it.status(), it.maxdisk(), it.maxmem()))
+            .map(it -> new VmStatus(node, it.vmid(), it.status(), it.maxdisk(), it.maxmem()))
             .toList();
     }
 

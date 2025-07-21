@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * @author Jens Ritter on 12.08.2024.
  */
-@ShorthandTestSpring(classes=MySpringRunner.MyTestConfig.class)
+@ShorthandTestSpring(classes = MySpringRunner.MyTestConfig.class)
 @ExtendWith(SpringExtension.class)
 public class MySpringRunner {
 

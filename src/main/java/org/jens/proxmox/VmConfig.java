@@ -45,7 +45,7 @@ public class VmConfig {
     public String get(String key) {return this.map.get(key);}
 
     public Map<String, DiskInfo> listDiskConfig() {
-        return map.entrySet().stream().filter(it->DISKPATTERN.matcher(it.getKey()).find()).collect(Collectors.toMap(Map.Entry::getKey, it->parseLine(it.getKey(), it.getValue())));
+        return map.entrySet().stream().filter(it -> DISKPATTERN.matcher(it.getKey()).find()).collect(Collectors.toMap(Map.Entry::getKey, it -> parseLine(it.getKey(), it.getValue())));
     }
 
     public DiskInfo parseLine(String diskid, String diskLine) {
