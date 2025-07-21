@@ -117,7 +117,7 @@ public class VmConfig {
 
     public Startup getStartUp() {
         var startup = map.getOrDefault("startup", "");
-        throw new IllegalStateException("unimplemented: TODO: generic csv-parser für this and DiskInfo");
+        throw new IllegalStateException("unimplemented: TODO: generic csv-parser für this and DiskInfo for " + startup);
     }
 
     public Set<String> getTags() {

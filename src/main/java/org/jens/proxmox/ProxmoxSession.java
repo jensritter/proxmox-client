@@ -61,21 +61,17 @@ public final class ProxmoxSession {
 
     public record Version(String release, String version, String repoid) {}
 
-    @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public Version queryVersion() {return getSingle("/version", new ParameterizedTypeReference<>() {});}
 
 
     public record Node(String node, String id, String level, String status, String type) {}
 
-    @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public List<Node> queryNodes() {return getList("/nodes", new ParameterizedTypeReference<>() {});}
-
 
     public record VmStatus(String node, int vmid, String status, long maxdisk, long maxmem) {}
 
     private record TmpVmStatus(int vmid, String status, long maxdisk, long maxmem) {}
 
-    @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public List<VmStatus> queryVms(String node) {
         List<TmpVmStatus> tmpList = getList("/nodes/" + node + "/qemu", new ParameterizedTypeReference<>() {});
         return tmpList.stream()
@@ -84,7 +80,6 @@ public final class ProxmoxSession {
     }
 
 
-    @SuppressWarnings("AnonymousInnerClassMayBeStatic")
     public VmConfig queryConfig(String node, int vmid) {
         String url = "/nodes/" + node + "/qemu/" + vmid + "/config";
         logger.info("{}", url);

@@ -29,7 +29,9 @@ public class Example {
         ProxmoxSession session = client.login();
 
         List<Node> nodes = session.queryNodes();
+        assert !nodes.isEmpty();
         List<VmStatus> pve = session.queryVms("pve");
+        assert !pve.isEmpty();
 
         VmConfig vmConfig = session.queryConfig("pve", 1);
         Map<String, DiskInfo> diskConfig = vmConfig.listDiskConfig();

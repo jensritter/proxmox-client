@@ -113,46 +113,46 @@ class ProxmoxSessionTest extends MySpringRunner {
             .collect(Collectors.toSet());
 
         assertThat(reducedSet)
-            .containsAnyElementsOf(VmConfig.DISKS);
+            .containsAnyElementsOf(VmConfig.DISKS)
 
-        assertThat(reducedSet).containsExactlyInAnyOrder(
-            "parent",
-            "agent",
-            "memory",
-            "bios",
-            "description",
-            "protection",
-            "cpulimit",
-            // "tpmstate", -- nicht mehr verwendet
-            "sata", /* X */
-            "scsi", /* X */
-            "scsihw",
-            "cores",
-            "startup",
-            "digest",
-            "sockets",
-            "net",
-            "boot",
-            "efidisk", /* X? */
-            "balloon",
-            "numa",
-            "cpu",
-            "ostype",
-            "ide", /* X */
-            "smbios",
-            "vmgenid",
-            "tags",
-            "meta",
-            "machine",
-            "onboot",
-            "name",
-            "unused",
+            .containsExactlyInAnyOrder(
+                "parent",
+                "agent",
+                "memory",
+                "bios",
+                "description",
+                "protection",
+                "cpulimit",
+                // "tpmstate", -- nicht mehr verwendet
+                "sata", /* X */
+                "scsi", /* X */
+                "scsihw",
+                "cores",
+                "startup",
+                "digest",
+                "sockets",
+                "net",
+                "boot",
+                "efidisk", /* X? */
+                "balloon",
+                "numa",
+                "cpu",
+                "ostype",
+                "ide", /* X */
+                "smbios",
+                "vmgenid",
+                "tags",
+                "meta",
+                "machine",
+                "onboot",
+                "name",
+                "unused",
 
-            "template",
-            "net1",
-            "cpuunits"
+                "template",
+                "net1",
+                "cpuunits"
 
-        );
+            );
         assertThat(allConfigKeys).hasSizeGreaterThan(reducedSet.size());
 
     }
