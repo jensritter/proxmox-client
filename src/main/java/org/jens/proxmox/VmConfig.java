@@ -95,7 +95,8 @@ public class VmConfig {
                 case "G" -> number;
                 case "M" -> number / 1024L;
                 case "K" -> number / 1024L / 1024L;
-                default -> throw new IllegalStateException("Unexpected value: " + sizeEinheit);
+                case "T" -> number / 1024L / 1024L / 1024L;
+                default -> throw new IllegalStateException("Unexpected Unit for Size : " + sizeEinheit);
             };
         } else {
             // unmounted cdroms, haben NULL size
