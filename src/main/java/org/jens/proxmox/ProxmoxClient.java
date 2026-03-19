@@ -26,10 +26,8 @@ import java.util.Optional;
 public class ProxmoxClient {
     private final Logger logger = LoggerFactory.getLogger(ProxmoxClient.class);
 
-
     private final ProxmoxProperties proxmoxProperties;
     private final RestClient.Builder restClientBuilder;
-
 
     public ProxmoxClient(String hostname, int port) {this(new ProxmoxProperties(hostname, port));}
 
@@ -82,9 +80,7 @@ public class ProxmoxClient {
         return new ProxmoxSession(use, ticket.clustername());
     }
 
-
     record GenericData<K>(K data) {}
-
 
     private record AccessTicketResponse(String ticket, @JsonProperty("CSRFPreventionToken") String csrfToken, String username, String clustername, Map<String, ?> cap) {}
 
