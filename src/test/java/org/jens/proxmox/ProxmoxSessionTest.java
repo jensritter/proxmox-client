@@ -150,8 +150,9 @@ class ProxmoxSessionTest extends MySpringRunner {
 
                 "template",
                 "net1",
-                "cpuunits"
+                "cpuunits",
 
+                "lock" /* während backups */
             );
         assertThat(allConfigKeys).hasSizeGreaterThan(reducedSet.size());
 
