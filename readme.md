@@ -1,5 +1,7 @@
 # Spring-Client für Proxmox-CE
 
+## Migrated to https://codeberg.org/jritter/proxmox-client
+
 See Proxmox-Documentation :
 
 https://pve.proxmox.com/pve-docs/api-viewer/
