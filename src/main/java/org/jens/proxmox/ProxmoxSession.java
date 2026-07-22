@@ -68,14 +68,22 @@ public final class ProxmoxSession {
 
     public List<Node> queryNodes() {return getList("/nodes", new ParameterizedTypeReference<>() {});}
 
-    public record VmStatus(String node, int vmid, String status, long maxdisk, long maxmem) {}
+    public record VmStatus(String node, int vmid, String status, long maxmem, int maxCpu) {}
 
-    private record TmpVmStatus(int vmid, String status, long maxdisk, long maxmem) {}
+    /* only extract specific properties */
+    private record TmpVmStatus(String node, String pool, int vmid, String status, long maxmem, int maxcpu) {}
 
     public List<VmStatus> queryVms(String node) {
         List<TmpVmStatus> tmpList = getList("/nodes/" + node + "/qemu", new ParameterizedTypeReference<>() {});
         return tmpList.stream()
-            .map(it -> new VmStatus(node, it.vmid(), it.status(), it.maxdisk(), it.maxmem()))
+            .map(it -> new VmStatus(node, it.vmid(), it.status(), it.maxmem(), it.maxcpu()))
+            .toList();
+    }
+
+    public List<VmStatus> queryVms() {
+        List<TmpVmStatus> tmpList = getList("/cluster/resources?type=vm", new ParameterizedTypeReference<>() {});
+        return tmpList.stream()
+            .map(it -> new VmStatus(it.node(), it.vmid(), it.status(), it.maxmem(), it.maxcpu()))
             .toList();
     }
 

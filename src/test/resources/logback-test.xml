@@ -1,43 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-
-DIESE CONFIG WIRD VON JETTY+TOMCAT VERWENDET !
-
- -->
 <configuration debug="false">
 
-    <property name="APP_NAME" value="logfile"/>
-    <appender name="RootConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
-        <!--
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>debug</level>
-        </filter>
-        -->
-        <encoder>
-            <!-- verkürzte daarstellung des klassennamens <pattern>%date{HH:mm:ss} [%thread] %-5level %logger{20}\(%line\)%marker %msg%n</pattern> -->
-            <!--<pattern>%date{ISO8601} %-5level %logger\(%line\)%marker %msg%n</pattern> -->
-            <pattern>%date{ISO8601} %-5level %logger\(%line\)%marker %msg%n</pattern> <!-- logging passiert innerhalb von container. container schrebit die zeit -->
-        </encoder>
+    <!-- see org.springframework.boot.spring-boot -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 
+    <!-- spring-boot-4-pattern -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}){} %clr(${PID:-}){magenta} %clr(--- %esb(){APPLICATION_NAME}%esb{APPLICATION_GROUP}[%15.15t] ${LOG_CORRELATION_PATTERN:-}){faint}%clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+
+    <!-- Required during tests : -->
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+
+    <appender name="RootConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${CONSOLE_LOG_THRESHOLD}</level>
+        </filter>
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${CONSOLE_LOG_CHARSET}</charset>
+        </encoder>
     </appender>
 
-    <logger name="org.hibernate.validator" level="WARN"/>
-    <logger name="org.jboss.logging" level="WARN"/>
+    <springProperty scope="context" name="application" source="spring.application.name"/>
 
+    <logger name="com.mangofactory.swagger" level="WARN"/>
+    <logger name="org.hibernate.validator" level="WARN"/>
     <logger name="org.springframework" level="INFO"/>
     <logger name="org.springframework.boot.actuate" level="WARN"/>
-
     <logger name="org.apache.http" level="WARN"/>
-    <logger name="org.apache.catalina" level="WARN"/>
-    <logger name="org.apache.tomcat" level="WARN"/>
-    <logger name="org.apache.coyote" level="WARN"/>
-
+    <logger name="org.eclipse.jetty" level="WARN"/>
+    <logger name="org.jboss.logging" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
-    <logger name="net.sf.ehcache" level="WARN"/>
-    <logger name="org.jens.shorthand.spring.boot.defaultchecker.BootPropertiesChecker" level="WARN"/>
+
+    <logger name="jdk.event.security" level="WARN"/>
+    <logger name="_org.springframework.web.servlet.HandlerMapping.Mappings" level="INFO"/>
+    <logger name="sun" level="INFO"/>
+    <logger name="javax.management" level="INFO"/>
+
+    <logger name="org.springframework.security" level="TRACE"/>
 
     <root level="DEBUG">
         <appender-ref ref="RootConsoleAppender"/>
     </root>
-
 </configuration>

@@ -94,6 +94,14 @@ class ProxmoxSessionTest extends MySpringRunner {
     }
 
     @Test
+    void queryAllVmConfigs() {
+        var vm = client.queryVms().stream().limit(1).findAny().orElseThrow();
+        assertThat(vm.vmid()).isNotNull();
+        assertThat(vm.node()).isNotNull();
+
+    }
+
+    @Test
     @EnabledIfEnvironmentVariable(named = "COMPUTERNAME", matches = "ACHT")
     void itValidConfigTest() {
         Set<String> allConfigKeys = new HashSet<>();
@@ -152,7 +160,8 @@ class ProxmoxSessionTest extends MySpringRunner {
                 "net1",
                 "cpuunits",
 
-                "lock" /* während backups */
+                // "lock" /* während backups */
+                "virtio" // für virtio disks
             );
         assertThat(allConfigKeys).hasSizeGreaterThan(reducedSet.size());
 
