@@ -16,14 +16,14 @@
 
     <developers>
         <developer>
-            <email>jens.ritter@gmail.com</email>
+            <email>jritter@noreply.codeberg.org</email>
             <name>Jens Ritter</name>
         </developer>
     </developers>
 
     <issueManagement>
-        <url>https://github.com/jensritter/proxmox-client/issues</url>
-        <system>GitHub Issues</system>
+        <url>https://codeberg.org/jritter/proxmox-client/issues</url>
+        <system>Codeberg Issues</system>
     </issueManagement>
 
     <licenses>
@@ -34,9 +34,9 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/jensritter/proxmox-client</url>
-        <connection>scm:git:https://github.com/jensritter/proxmox-client.git</connection>
-        <developerConnection>scm:git:git@github.com:jensritter/proxmox-client.git</developerConnection>
+        <url>https://codeberg.org/jritter/proxmox-client</url>
+        <connection>scm:git:https://codeberg.org/jritter/proxmox-client.git</connection>
+        <developerConnection>scm:git:git@codeberg.org/jritter/proxmox-client.gitt</developerConnection>
     </scm>
 
     <dependencies>
